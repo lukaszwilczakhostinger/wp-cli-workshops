@@ -1,0 +1,24 @@
+---
+description: WordPress PHP coding standards and PHPDoc for Maintenance Tools WCUS26
+globs: "**/*.php"
+alwaysApply: false
+---
+
+# WordPress PHP style
+
+- Tabs, not spaces. Use `array()`, not `[]`.
+- Spaces inside parens: `if ( ! $foo )`, `__( 'Text', 'maintenance-tools-wcus26' )`.
+- Yoda: `if ( 'post' === $type )`. Wrap long lines (~110 chars) before `&&`, `||`, `.`.
+- Empty methods on two lines. Do not use `function foo() {}`.
+
+```php
+protected function before_run(): void {
+}
+```
+
+# PHPDoc
+
+- Short summary ending with a period, then `@since 1.0.0`.
+- `@param` / `@return` include a description, not only a type. Add `@global wpdb $wpdb` when using `$wpdb`.
+- Hooks: “Filters …” / “Fires …”. Overrides of parent methods may use `{@inheritdoc}`.
+- Class docblocks describe purpose; do not write `Class Foo`.

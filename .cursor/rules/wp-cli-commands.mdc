@@ -1,0 +1,18 @@
+---
+description: How to add wp wcus26 WP-CLI commands in Maintenance Tools WCUS26
+globs: "includes/cli/**/*.php"
+alwaysApply: false
+---
+
+# WP-CLI commands
+
+Register under `wp wcus26 <name>`. Never register `wcus26` as a closure — `Root_Command` must stay an empty class so it can have subcommands.
+
+- Drop `includes/cli/commands/class-{name}-command.php`. `Command_Loader` auto-discovers `class-*-command.php` and skips abstracts.
+- File `class-list-posts-command.php` → `Maintenance_Tools_WCUS26\CLI\Commands\List_Posts_Command`.
+- No post loop: extend `Abstract_Command`, implement `run()`.
+- Post loop: extend `Abstract_Posts_Command`, implement `process_post()`. Optional `before_run()`, `after_batch()`, `print_summary()`.
+- Shared flags: `--post-type`, `--post-status`, `--limit`, `--offset`, `--batch-size` (default 10), `--sleep`, `--dry-run`, `--save-logs`, `--skip-all-hooks`, `--skip-hooks=save_post,edit_post`. Extra CLI keys map to `WP_Query` via `Query_Arg_Mapper` (`category_in` → `category__in`).
+- `--skip-all-hooks` / `--skip-hooks` apply only during `process_post()` so `WP_Query` still runs with hooks. `--skip-all-hooks` wins if both are set.
+- Counters: `$visited`, `$updated`, `$skipped`, `$failed`. Call `$this->after_batch( $posts )` once per batch, then free memory.
+- `--save-logs` only: one `cli_logs` row per visible CLI line, not per command.

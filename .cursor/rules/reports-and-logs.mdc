@@ -1,0 +1,28 @@
+---
+description: CSV reports and CLI logs for Maintenance Tools WCUS26
+globs: "{includes/table/**/*.php,includes/admin/**/*.php,includes/cli/commands/**/*.php}"
+alwaysApply: false
+---
+
+# Reports and logs
+
+Tables: `{$wpdb->prefix}cli_reports` (`longtext` content) and `{$wpdb->prefix}cli_logs` (`varchar(1000)`). Schema version lives on `Installer`. Admin UI: Maintenance → Reports / Logs.
+
+Create the report once, append CSV **per batch**, never per post. `Report::to_csv()` writes rows only — pass the header in `create()`.
+
+```php
+protected function before_run(): void {
+	$this->report = Report::create(
+		__( 'Report name', 'maintenance-tools-wcus26' ),
+		"id,title,url\n"
+	);
+}
+
+protected function after_batch( array $posts ): void {
+	if ( ! $this->report instanceof Report || empty( $this->batch_rows ) ) {
+		return;
+	}
+	$this->report->append( Report::to_csv( $this->batch_rows ) );
+	$this->batch_rows = array();
+}
+```

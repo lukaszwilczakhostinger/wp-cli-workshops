@@ -1,0 +1,15 @@
+---
+description: Workshop constraints for live WP-CLI content-maintenance commands
+globs: "**/*.php"
+alwaysApply: false
+---
+
+# Live workshop commands
+
+This plugin is a base for generating WP-CLI content-maintenance commands live. Iterate and test; the first draft does not need to be perfect.
+
+- **Reports** (e.g. dead links): extend `Abstract_Posts_Command`, copy `structure-stats-report` (`Report::create` once, `append` in `after_batch`).
+- **Mutations** (relative URLs, heading levels, block swaps, alt text): honour `--dry-run`; persist with `wp_update_post()`. Increment `$updated` / `$skipped` / `$failed`. Use `--skip-all-hooks` (or `--skip-hooks=save_post,…`) so plugin callbacks do not run on update.
+- **Gutenberg**: change content with `parse_blocks()` / `serialize_blocks()` (and block `attrs`). Do not `str_replace` serialized block comments.
+- **HTTP / OpenAI**: use `wp_remote_*`. Timeouts + existing `--sleep`. Store API keys in an option or env, never in the repo.
+- Do not add Composer or extra plugins unless asked.

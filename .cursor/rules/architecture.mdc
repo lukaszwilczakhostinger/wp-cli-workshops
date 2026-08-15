@@ -1,0 +1,23 @@
+---
+description: Maintenance Tools WCUS26 plugin architecture, namespaces, and file layout
+globs: "**/*.php"
+alwaysApply: false
+---
+
+# Plugin architecture
+
+PHP 8.0+, WordPress 6.0+. Code and comments in English. Text domain: `maintenance-tools-wcus26`.
+
+- Namespace: `Maintenance_Tools_WCUS26` (sub-namespaces: `CLI`, `CLI\Commands`, `CLI\Helpers`, `Admin`, `Table`).
+- Autoload: `Maintenance_Tools_WCUS26\Foo_Bar` → `includes/class-foo-bar.php`. Sub-namespaces become lowercase directories (`CLI\Commands\List_Posts_Command` → `includes/cli/commands/class-list-posts-command.php`).
+- Every PHP file: `if ( ! defined( 'ABSPATH' ) ) { exit; }` (uninstall uses `WP_UNINSTALL_PLUGIN`).
+- Do not edit other plugins, themes, or WordPress core unless asked.
+
+```
+maintenance-tools-wcus26.php    bootstrap, constants, activation
+includes/class-plugin.php       admin + CLI bootstrap
+includes/cli/commands/          concrete `wp wcus26` commands (auto-discovered)
+includes/cli/helpers/           analyzers, mappers, log capture
+includes/table/                 custom tables + Report writer
+includes/admin/                 Maintenance menu, list tables
+```
