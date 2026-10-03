@@ -1,6 +1,6 @@
-# WP-CLI Workshops — WordCamp US 2026
+# WP-CLI Workshops — WordCamp
 
-This repository was created for the hands-on workshop at **WordCamp US 2026** (Phoenix, AZ).
+This repository was created for the hands-on workshop at **WordCamp** .
 
 | | |
 |---|---|
